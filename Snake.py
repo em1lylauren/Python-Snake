@@ -25,14 +25,25 @@ py.display.set_icon(icon)
 # Initial snake position
 snakeHead = [100, 100]
 snakeBody = [snakeHead,
-             [snakeHead[0], snakeHead[1]-10],
-             [snakeHead[0], snakeHead[1]-20],
-             [snakeHead[0], snakeHead[1]-30]]
+             [100, 90],
+             [100, 80],
+             [100, 70]]
 snakeDirection = "RIGHT"
 snakeSpeed = 15
 
-# Game loop
 
+# Updates the rest of the snake position
+def updateSnakeBody():
+    i = len(snakeBody)-1
+
+    while i > 1:
+        snakeBody[i] = snakeBody[i-1]
+        i -= 1
+
+    snakeBody[1] = oldHead
+
+
+# Game loop
 while True:
 
     # Controls
@@ -42,15 +53,18 @@ while True:
             sys.exit()
 
         if event.type == py.KEYDOWN:
-            if event.key == py.K_UP:
+            if event.key == py.K_UP or event.key == py.K_w:
                 snakeDirection = "UP"
-            if event.key == py.K_DOWN:
+            if event.key == py.K_DOWN or event.key == py.K_s:
                 snakeDirection = "DOWN"
-            if event.key == py.K_LEFT:
+            if event.key == py.K_LEFT or event.key == py.K_a:
                 snakeDirection = "LEFT"
-            if event.key == py.K_RIGHT:
+            if event.key == py.K_RIGHT or event.key == py.K_d:
                 snakeDirection = "RIGHT"
 
+    # Update snake position
+    oldHead = [snakeHead[0], snakeHead[1]]
+    updateSnakeBody()
     match snakeDirection:
         case "UP":
             snakeHead[1] -= 10
