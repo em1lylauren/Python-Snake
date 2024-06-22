@@ -54,13 +54,17 @@ while True:
 
         if event.type == py.KEYDOWN:
             if event.key == py.K_UP or event.key == py.K_w:
-                snakeDirection = "UP"
+                if snakeDirection != "DOWN":  # Can't move up if moving down
+                    snakeDirection = "UP"
             if event.key == py.K_DOWN or event.key == py.K_s:
-                snakeDirection = "DOWN"
+                if snakeDirection != "UP":  # Can't move down if moving up
+                    snakeDirection = "DOWN"
             if event.key == py.K_LEFT or event.key == py.K_a:
-                snakeDirection = "LEFT"
+                if snakeDirection != "RIGHT":  # Can't move left if moving right
+                    snakeDirection = "LEFT"
             if event.key == py.K_RIGHT or event.key == py.K_d:
-                snakeDirection = "RIGHT"
+                if snakeDirection != "LEFT":  # Can't move right if moving left
+                    snakeDirection = "RIGHT"
 
     # Update snake position
     oldHead = [snakeHead[0], snakeHead[1]]
