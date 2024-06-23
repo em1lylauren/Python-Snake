@@ -13,6 +13,10 @@ clock = py.time.Clock()
 # Colours
 black = py.Color(0, 0, 0)
 green = py.Color(71, 204, 73)
+blue = py.Color(41, 182, 246)
+red = py.Color(211, 47, 47)
+yellow = py.Color(255, 235, 59)
+purple = py.Color(142, 36, 170)
 
 # Initialization
 py.init()
@@ -22,7 +26,7 @@ py.display.set_caption("Snake")
 icon = py.image.load("apple.png")
 py.display.set_icon(icon)
 
-# Initial snake position
+# Initial snake attributes
 snakeHead = [100, 100]
 snakeBody = [snakeHead,
              [100, 90],
@@ -30,6 +34,12 @@ snakeBody = [snakeHead,
              [100, 70]]
 snakeDirection = "RIGHT"
 snakeSpeed = 15
+
+# Initial fruit attributes
+fruitLocation = [rand.randint(1, WINDOWYSIZE)//10 * 10, rand.randint(1, WINDOWYSIZE)//10 * 10]
+fruitColors = [blue, red, yellow, purple]
+fruitColor = rand.choice(fruitColors)
+fruitSpawn = False
 
 
 # Updates the rest of the snake position
@@ -79,11 +89,24 @@ while True:
         case "RIGHT":
             snakeHead[0] += 10
 
+    # Check for collision between snake and fruit
+    if snakeHead[0] == fruitLocation[0] and snakeHead[1] == fruitLocation[1]:
+        snakeBody.append([snakeBody[-1][0], snakeBody[-1][1]])
+        fruitSpawn = True
+
+    # Update fruit location (only one at a time)
+    if fruitSpawn:
+        fruitLocation = [rand.randint(1, WINDOWYSIZE)//10 * 10, rand.randint(1, WINDOWYSIZE)//10 * 10]
+        fruitColor = rand.choice(fruitColors)
+        fruitSpawn = False
+
     screen.fill(black)
 
     # Draw snake
     for piece in snakeBody:
         py.draw.rect(screen, green, py.Rect(piece[0], piece[1], 10, 10))
+    # Draw fruit
+    py.draw.rect(screen, fruitColor, py.Rect(fruitLocation[0], fruitLocation[1], 10, 10))
 
     # Redraw screen
     py.display.update()
