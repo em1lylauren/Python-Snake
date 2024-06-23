@@ -12,6 +12,7 @@ clock = py.time.Clock()
 
 # Colours
 black = py.Color(0, 0, 0)
+white = py.Color(255, 255, 255)
 green = py.Color(71, 204, 73)
 blue = py.Color(41, 182, 246)
 red = py.Color(211, 47, 47)
@@ -23,6 +24,7 @@ py.init()
 screen = py.display.set_mode((WINDOWXSIZE, WINDOWYSIZE))
 py.display.set_caption("Snake")
 
+textFont = py.font.Font("PixelDigivolveFont.ttf", 20)
 icon = py.image.load("apple.png")
 py.display.set_icon(icon)
 
@@ -35,8 +37,11 @@ snakeBody = [snakeHead,
 snakeDirection = "RIGHT"
 snakeSpeed = 15
 
+# Score
+score = 0
+
 # Initial fruit attributes
-fruitLocation = [rand.randint(1, WINDOWYSIZE)//10 * 10, rand.randint(1, WINDOWYSIZE)//10 * 10]
+fruitLocation = [rand.randint(10, WINDOWYSIZE)//10 * 10, rand.randint(10, WINDOWYSIZE)//10 * 10]
 fruitColors = [blue, red, yellow, purple]
 fruitColor = rand.choice(fruitColors)
 fruitSpawn = False
@@ -51,6 +56,12 @@ def updateSnakeBody():
         i -= 1
 
     snakeBody[1] = oldHead
+
+
+# Updates the player's score display
+def updateScore():
+    scoreObj = textFont.render("Score: " + str(score), True, white)
+    screen.blit(scoreObj, scoreObj.get_rect())
 
 
 # Game loop
@@ -91,6 +102,7 @@ while True:
 
     # Check for collision between snake and fruit
     if snakeHead[0] == fruitLocation[0] and snakeHead[1] == fruitLocation[1]:
+        score += 10
         snakeBody.append([snakeBody[-1][0], snakeBody[-1][1]])
         fruitSpawn = True
 
@@ -107,6 +119,8 @@ while True:
         py.draw.rect(screen, green, py.Rect(piece[0], piece[1], 10, 10))
     # Draw fruit
     py.draw.rect(screen, fruitColor, py.Rect(fruitLocation[0], fruitLocation[1], 10, 10))
+    # Draw score
+    updateScore()
 
     # Redraw screen
     py.display.update()
