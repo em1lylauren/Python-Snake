@@ -18,6 +18,7 @@ blue = py.Color(41, 182, 246)
 red = py.Color(211, 47, 47)
 yellow = py.Color(255, 235, 59)
 purple = py.Color(142, 36, 170)
+orange = py.Color(247, 28, 0)
 
 # Initialization
 py.init()
@@ -42,7 +43,7 @@ score = 0
 
 # Initial fruit attributes
 fruitLocation = [rand.randint(10, WINDOWYSIZE)//10 * 10, rand.randint(10, WINDOWYSIZE)//10 * 10]
-fruitColors = [blue, red, yellow, purple]
+fruitColors = [blue, red, yellow, purple, orange]
 fruitColor = rand.choice(fruitColors)
 fruitSpawn = False
 
