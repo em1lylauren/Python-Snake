@@ -140,6 +140,7 @@ while True:
     # Draw snake
     for piece in snakeBody:
         py.draw.rect(screen, green, py.Rect(piece[0], piece[1], 10, 10))
+
     # Draw fruit
     py.draw.rect(screen, fruitColor, py.Rect(fruitLocation[0], fruitLocation[1], 10, 10))
     # Draw score
@@ -150,6 +151,11 @@ while True:
         gameOver()
     elif snakeHead[0] > WINDOWXSIZE - 10 or snakeHead[1] > WINDOWYSIZE - 10:
         gameOver()
+
+    # Checking if snake collides with itself (Game over condition)
+    for piece in snakeBody[1:]:
+        if snakeHead[0] == piece[0] and snakeHead[1] == piece[1]:
+            gameOver()
 
     # Redraw screen
     py.display.update()
