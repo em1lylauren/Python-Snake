@@ -65,6 +65,28 @@ def updateScore():
     screen.blit(scoreObj, scoreObj.get_rect())
 
 
+# Shows the player's final score and ends the game
+def gameOver():
+    gameOverObj = textFont.render("Game Over", True, white)
+    gameOverObjRect = gameOverObj.get_rect()
+    gameOverObjRect.midtop = (WINDOWXSIZE//2, WINDOWYSIZE//2)  # Center text in middle of screen
+
+    screen.blit(gameOverObj, gameOverObjRect)
+    py.display.flip()
+
+    t.sleep(3)
+
+    screen.fill(black)
+    gameOverObj = textFont.render("Final score: " + str(score), True, white)
+    screen.blit(gameOverObj, gameOverObjRect)
+    py.display.flip()
+
+    t.sleep(3)
+
+    py.quit()
+    sys.exit()
+
+
 # Game loop
 while True:
 
@@ -122,6 +144,12 @@ while True:
     py.draw.rect(screen, fruitColor, py.Rect(fruitLocation[0], fruitLocation[1], 10, 10))
     # Draw score
     updateScore()
+
+    # Checking if snake beyond bounds (Game over condition)
+    if snakeHead[0] < 0 or snakeHead[1] < 0:
+        gameOver()
+    elif snakeHead[0] > WINDOWXSIZE - 10 or snakeHead[1] > WINDOWYSIZE - 10:
+        gameOver()
 
     # Redraw screen
     py.display.update()
