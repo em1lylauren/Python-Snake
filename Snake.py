@@ -9,6 +9,7 @@ WINDOWXSIZE = 800
 WINDOWYSIZE = 800
 
 clock = py.time.Clock()
+gameStart = False  # Determines weather we are in the main game loop or not
 
 # Colours
 black = py.Color(0, 0, 0)
@@ -42,18 +43,87 @@ snakeSpeed = 15
 score = 0
 
 # Initial fruit attributes
-fruitLocation = [rand.randint(10, WINDOWYSIZE)//10 * 10, rand.randint(10, WINDOWYSIZE)//10 * 10]
+fruitLocation = [rand.randint(10, WINDOWYSIZE) // 10 * 10, rand.randint(10, WINDOWYSIZE) // 10 * 10]
 fruitColors = [blue, red, yellow, purple, orange]
 fruitColor = rand.choice(fruitColors)
 fruitSpawn = False
 
+# Buttons for start menu
+buttons = []
+
+
+# A class for the menu buttons
+class Button():
+    # Initializes a new button object and adds it to the array of buttons
+    def __init__(self, x, y, width, height, text='Button', onClickFunction=None):
+        self.x = x  # X location on screen
+        self.y = y  # Y location on screen
+        self.width = width  # Button width
+        self.height = height  # Button height
+        self.onClickFunction = onClickFunction  # Function to call when button is clicked
+
+        # Normal, hover, and pressed colours
+        self.fillColors = {
+            'normal': '#7bb9fc',
+            'hover': '#9fccfc',
+            'pressed': '#518ac6'
+        }
+
+        self.buttonSurface = py.Surface((self.width, self.height))
+        self.buttonRect = py.Rect(self.x, self.y, self.width, self.height)
+        self.buttonSurf = textFont.render(text, True, white)
+        buttons.append(self)
+
+    # Updates the graphics of the button
+    def updateButton(self):
+        mousePosition = py.mouse.get_pos()
+
+        self.buttonSurface.fill(self.fillColors["normal"])
+        if self.buttonRect.collidepoint(mousePosition):
+            self.buttonSurface.fill(self.fillColors["hover"])
+
+            if py.mouse.get_pressed(num_buttons=3)[0]:
+                self.buttonSurface.fill(self.fillColors["pressed"])
+                self.onClickFunction()
+
+        self.buttonSurface.blit(self.buttonSurf, [self.buttonRect.width / 2 - self.buttonSurf.get_rect().width / 2,
+                                                  self.buttonRect.height / 2 - self.buttonSurf.get_rect().height / 2])
+
+        screen.blit(self.buttonSurface, self.buttonRect)
+
+
+# Starts the main game loop and resets the game attributes
+def startGame():
+    global gameStart, snakeHead, snakeBody, snakeDirection, score, fruitLocation, fruitColor, fruitSpawn
+    gameStart = True
+
+    # Re-initialize the game attributes
+    snakeHead = [100, 100]
+    snakeBody = [snakeHead,
+                 [100, 90],
+                 [100, 80],
+                 [100, 70]]
+    snakeDirection = "RIGHT"
+
+    score = 0
+
+    fruitLocation = [rand.randint(10, WINDOWYSIZE) // 10 * 10, rand.randint(10, WINDOWYSIZE) // 10 * 10]
+    fruitColor = rand.choice(fruitColors)
+    fruitSpawn = False
+
+
+# Quits the game
+def quitGame():
+    py.quit()
+    sys.exit()
+
 
 # Updates the rest of the snake position
 def updateSnakeBody():
-    i = len(snakeBody)-1
+    i = len(snakeBody) - 1
 
     while i > 1:
-        snakeBody[i] = snakeBody[i-1]
+        snakeBody[i] = snakeBody[i - 1]
         i -= 1
 
     snakeBody[1] = oldHead
@@ -69,7 +139,7 @@ def updateScore():
 def gameOver():
     gameOverObj = textFont.render("Game Over", True, white)
     gameOverObjRect = gameOverObj.get_rect()
-    gameOverObjRect.midtop = (WINDOWXSIZE//2, WINDOWYSIZE//2)  # Center text in middle of screen
+    gameOverObjRect.midtop = (WINDOWXSIZE // 2, WINDOWYSIZE // 2)  # Center text in middle of screen
 
     screen.blit(gameOverObj, gameOverObjRect)
     py.display.flip()
@@ -83,83 +153,104 @@ def gameOver():
 
     t.sleep(3)
 
-    py.quit()
-    sys.exit()
+    # Go back to the main menu
+    global gameStart
+    gameStart = False
+
+
+startButton = Button(30, 30, 400, 100, "Start", startGame)
+quitButton = Button(30, 140, 400, 100, "Quit", quitGame)
+
+
+def startMenu():
+    # Start menu loop
+    while not gameStart:
+        screen.fill(black)
+        for menuEvent in py.event.get():
+            if menuEvent.type == py.QUIT:
+                quitGame()
+
+        for button in buttons:
+            button.updateButton()
+
+        py.display.flip()
+        clock.tick(snakeSpeed)
 
 
 # Game loop
 while True:
+    if gameStart:
+        # Controls
+        for event in py.event.get():
+            if event.type == py.QUIT:
+                quitGame()
 
-    # Controls
-    for event in py.event.get():
-        if event.type == py.QUIT:
-            py.quit()
-            sys.exit()
+            if event.type == py.KEYDOWN:
+                if event.key == py.K_UP or event.key == py.K_w:
+                    if snakeDirection != "DOWN":  # Can't move up if moving down
+                        snakeDirection = "UP"
+                if event.key == py.K_DOWN or event.key == py.K_s:
+                    if snakeDirection != "UP":  # Can't move down if moving up
+                        snakeDirection = "DOWN"
+                if event.key == py.K_LEFT or event.key == py.K_a:
+                    if snakeDirection != "RIGHT":  # Can't move left if moving right
+                        snakeDirection = "LEFT"
+                if event.key == py.K_RIGHT or event.key == py.K_d:
+                    if snakeDirection != "LEFT":  # Can't move right if moving left
+                        snakeDirection = "RIGHT"
 
-        if event.type == py.KEYDOWN:
-            if event.key == py.K_UP or event.key == py.K_w:
-                if snakeDirection != "DOWN":  # Can't move up if moving down
-                    snakeDirection = "UP"
-            if event.key == py.K_DOWN or event.key == py.K_s:
-                if snakeDirection != "UP":  # Can't move down if moving up
-                    snakeDirection = "DOWN"
-            if event.key == py.K_LEFT or event.key == py.K_a:
-                if snakeDirection != "RIGHT":  # Can't move left if moving right
-                    snakeDirection = "LEFT"
-            if event.key == py.K_RIGHT or event.key == py.K_d:
-                if snakeDirection != "LEFT":  # Can't move right if moving left
-                    snakeDirection = "RIGHT"
+        # Update snake position
+        oldHead = [snakeHead[0], snakeHead[1]]
+        updateSnakeBody()
+        match snakeDirection:
+            case "UP":
+                snakeHead[1] -= 10
+            case "DOWN":
+                snakeHead[1] += 10
+            case "LEFT":
+                snakeHead[0] -= 10
+            case "RIGHT":
+                snakeHead[0] += 10
 
-    # Update snake position
-    oldHead = [snakeHead[0], snakeHead[1]]
-    updateSnakeBody()
-    match snakeDirection:
-        case "UP":
-            snakeHead[1] -= 10
-        case "DOWN":
-            snakeHead[1] += 10
-        case "LEFT":
-            snakeHead[0] -= 10
-        case "RIGHT":
-            snakeHead[0] += 10
+        # Check for collision between snake and fruit
+        if snakeHead[0] == fruitLocation[0] and snakeHead[1] == fruitLocation[1]:
+            score += 10
+            snakeBody.append([snakeBody[-1][0], snakeBody[-1][1]])
+            fruitSpawn = True
 
-    # Check for collision between snake and fruit
-    if snakeHead[0] == fruitLocation[0] and snakeHead[1] == fruitLocation[1]:
-        score += 10
-        snakeBody.append([snakeBody[-1][0], snakeBody[-1][1]])
-        fruitSpawn = True
+        # Update fruit location (only one at a time)
+        if fruitSpawn:
+            fruitLocation = [rand.randint(1, WINDOWYSIZE) // 10 * 10, rand.randint(1, WINDOWYSIZE) // 10 * 10]
+            fruitColor = rand.choice(fruitColors)
+            fruitSpawn = False
 
-    # Update fruit location (only one at a time)
-    if fruitSpawn:
-        fruitLocation = [rand.randint(1, WINDOWYSIZE)//10 * 10, rand.randint(1, WINDOWYSIZE)//10 * 10]
-        fruitColor = rand.choice(fruitColors)
-        fruitSpawn = False
+        screen.fill(black)
 
-    screen.fill(black)
+        # Draw snake
+        for piece in snakeBody:
+            py.draw.rect(screen, green, py.Rect(piece[0], piece[1], 10, 10))
 
-    # Draw snake
-    for piece in snakeBody:
-        py.draw.rect(screen, green, py.Rect(piece[0], piece[1], 10, 10))
+        # Draw fruit
+        py.draw.rect(screen, fruitColor, py.Rect(fruitLocation[0], fruitLocation[1], 10, 10))
+        # Draw score
+        updateScore()
 
-    # Draw fruit
-    py.draw.rect(screen, fruitColor, py.Rect(fruitLocation[0], fruitLocation[1], 10, 10))
-    # Draw score
-    updateScore()
-
-    # Checking if snake beyond bounds (Game over condition)
-    if snakeHead[0] < 0 or snakeHead[1] < 0:
-        gameOver()
-    elif snakeHead[0] > WINDOWXSIZE - 10 or snakeHead[1] > WINDOWYSIZE - 10:
-        gameOver()
-
-    # Checking if snake collides with itself (Game over condition)
-    for piece in snakeBody[1:]:
-        if snakeHead[0] == piece[0] and snakeHead[1] == piece[1]:
+        # Checking if snake beyond bounds (Game over condition)
+        if snakeHead[0] < 0 or snakeHead[1] < 0:
+            gameOver()
+        elif snakeHead[0] > WINDOWXSIZE - 10 or snakeHead[1] > WINDOWYSIZE - 10:
             gameOver()
 
-    # Redraw screen
-    py.display.update()
+        # Checking if snake collides with itself (Game over condition)
+        for piece in snakeBody[1:]:
+            if snakeHead[0] == piece[0] and snakeHead[1] == piece[1]:
+                gameOver()
 
-    # Update clock
-    clock.tick(snakeSpeed)
+        # Redraw screen
+        py.display.update()
 
+        # Update clock
+        clock.tick(snakeSpeed)
+
+    else:
+        startMenu()
