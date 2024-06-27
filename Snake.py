@@ -27,6 +27,7 @@ screen = py.display.set_mode((WINDOWXSIZE, WINDOWYSIZE))
 py.display.set_caption("Snake")
 
 textFont = py.font.Font("PixelDigivolveFont.ttf", 20)
+textFontLarge = py.font.Font("PixelDigivolveFont.ttf", 50)
 icon = py.image.load("apple.png")
 py.display.set_icon(icon)
 
@@ -158,8 +159,11 @@ def gameOver():
     gameStart = False
 
 
-startButton = Button(30, 30, 400, 100, "Start", startGame)
-quitButton = Button(30, 140, 400, 100, "Quit", quitGame)
+startMenuText = textFontLarge.render("Snake", True, green)
+startMenuRect = startMenuText.get_rect()
+startMenuRect.midtop = (400, 250)  # Center text in middle of screen
+startButton = Button(200, 400, 400, 100, "Start", startGame)
+quitButton = Button(200, 550, 400, 100, "Quit", quitGame)
 
 
 def startMenu():
@@ -172,6 +176,8 @@ def startMenu():
 
         for button in buttons:
             button.updateButton()
+
+        screen.blit(startMenuText, startMenuRect)
 
         py.display.flip()
         clock.tick(snakeSpeed)
