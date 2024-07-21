@@ -43,10 +43,25 @@ snakeSpeed = 15
 # Score
 score = 0
 
+
+class Fruit():
+    def __init__(self, x, y, image):
+        self.x = x  # x location on screen
+        self.y = y  # y location on screen
+        self.image = image  # image of the fruit
+
+
 # Initial fruit attributes
 fruitLocation = [rand.randint(10, WINDOWYSIZE) // 10 * 10, rand.randint(10, WINDOWYSIZE) // 10 * 10]
-fruitColors = [blue, red, yellow, purple, orange]
-fruitColor = rand.choice(fruitColors)
+fruitSpriteSheet = py.image.load("foods.png")
+fruits = {
+    'banana': (10, 10, 25, 25),
+    'orange': (40, 5, 25, 25),
+    'apple': (70, 10, 25, 25),
+    'watermelon': (100, 10, 25, 25),
+    'pineapple': (140, 10, 25, 25),
+    'cherry': (5, 40, 25, 25)
+}
 fruitSpawn = False
 
 # Buttons for start menu
@@ -95,7 +110,7 @@ class Button():
 
 # Starts the main game loop and resets the game attributes
 def startGame():
-    global gameStart, snakeHead, snakeBody, snakeDirection, score, fruitLocation, fruitColor, fruitSpawn
+    global gameStart, snakeHead, snakeBody, snakeDirection, score, fruitLocation, fruitSpawn, fruitSprite
     gameStart = True
 
     # Re-initialize the game attributes
@@ -109,7 +124,10 @@ def startGame():
     score = 0
 
     fruitLocation = [rand.randint(10, WINDOWYSIZE) // 10 * 10, rand.randint(10, WINDOWYSIZE) // 10 * 10]
-    fruitColor = rand.choice(fruitColors)
+    fruitSprite = rand.choice(list(fruits))
+    print("Fruit type: " + str(fruitSprite))
+    print("Fruit location: " + str(fruitLocation))
+    print("Fruit sprite location on png: " + str(fruits[fruitSprite]))
     fruitSpawn = False
 
 
@@ -227,7 +245,10 @@ while True:
         # Update fruit location (only one at a time)
         if fruitSpawn:
             fruitLocation = [rand.randint(1, WINDOWYSIZE) // 10 * 10, rand.randint(1, WINDOWYSIZE) // 10 * 10]
-            fruitColor = rand.choice(fruitColors)
+            fruitSprite = rand.choice(list(fruits))
+            print("Fruit type: " + str(fruitSprite))
+            print("Fruit location: " + str(fruitLocation))
+            print("Fruit sprite location on png: " + str(fruits[fruitSprite]))
             fruitSpawn = False
 
         screen.fill(black)
@@ -237,7 +258,9 @@ while True:
             py.draw.rect(screen, green, py.Rect(piece[0], piece[1], 10, 10))
 
         # Draw fruit
-        py.draw.rect(screen, fruitColor, py.Rect(fruitLocation[0], fruitLocation[1], 10, 10))
+        fruit = py.Surface((25, 25))
+        fruit.blit(fruitSpriteSheet, (0, 0), fruits[fruitSprite])
+        screen.blit(fruit, fruitLocation)
         # Draw score
         updateScore()
 
