@@ -55,12 +55,12 @@ class Fruit():
 fruitLocation = [rand.randint(10, WINDOWYSIZE) // 10 * 10, rand.randint(10, WINDOWYSIZE) // 10 * 10]
 fruitSpriteSheet = py.image.load("foods.png")
 fruits = {
-    'banana': (10, 10, 25, 25),
-    'orange': (40, 5, 25, 25),
-    'apple': (70, 10, 25, 25),
-    'watermelon': (100, 10, 25, 25),
-    'pineapple': (140, 10, 25, 25),
-    'cherry': (5, 40, 25, 25)
+    'banana': (0, 2, 27, 27),
+    'orange': (38, 5, 27, 27),
+    'apple': (68, 4, 27, 27),
+    'watermelon': (99, 10, 27, 27),
+    'pineapple': (130, 3, 27, 27),
+    'cherry': (5, 38, 27, 27)
 }
 fruitSpawn = False
 
@@ -258,7 +258,7 @@ while True:
             py.draw.rect(screen, green, py.Rect(piece[0], piece[1], 10, 10))
 
         # Draw fruit
-        fruit = py.Surface((25, 25))
+        fruit = py.Surface((30, 30))
         fruit.blit(fruitSpriteSheet, (0, 0), fruits[fruitSprite])
         screen.blit(fruit, fruitLocation)
         # Draw score
