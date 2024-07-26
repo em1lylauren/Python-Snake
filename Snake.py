@@ -265,15 +265,16 @@ while True:
                 snakeHead[0] += 10
 
         # Check for collision between snake and fruit
-        if snakeHead[0] == fruitLocation[0] and snakeHead[1] == fruitLocation[1]:
-            scoreCollectSound.play() # Play sound
+        if (snakeHead[0] in range(fruitLocation[0], fruitLocation[0] + 27)
+                and snakeHead[1] in range(fruitLocation[1], fruitLocation[1] + 27)):
+            scoreCollectSound.play()  # Play sound
             score += 10
             snakeBody.append([snakeBody[-1][0], snakeBody[-1][1]])
             fruitSpawn = True
 
         # Update fruit location (only one at a time)
         if fruitSpawn:
-            fruitLocation = [rand.randint(1, WINDOWYSIZE) // 10 * 10, rand.randint(1, WINDOWYSIZE) // 10 * 10]
+            fruitLocation = [rand.randint(1, WINDOWYSIZE) // 20 * 20, rand.randint(1, WINDOWYSIZE) // 20 * 20]
             fruitSprite = rand.choice(list(fruits))
             print("Fruit type: " + str(fruitSprite))
             print("Fruit location: " + str(fruitLocation))
@@ -287,7 +288,7 @@ while True:
             py.draw.rect(screen, green, py.Rect(piece[0], piece[1], 10, 10))
 
         # Draw fruit
-        fruit = py.Surface((30, 30))
+        fruit = py.Surface((27, 27))
         fruit.blit(fruitSpriteSheet, (0, 0), fruits[fruitSprite])
         screen.blit(fruit, fruitLocation)
         # Draw score
