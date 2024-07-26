@@ -31,6 +31,16 @@ textFontLarge = py.font.Font("PixelDigivolveFont.ttf", 50)
 icon = py.image.load("apple.png")
 py.display.set_icon(icon)
 
+# Initialize sound mixer
+py.mixer.init()
+
+
+# All sounds
+buttonHoverSound = py.mixer.Sound("sounds/buttonhover.wav")
+startGameSound = py.mixer.Sound("sounds/startgame.ogg")
+scoreCollectSound = py.mixer.Sound("sounds/coincollect.wav")
+bgm = py.mixer.Sound("sounds/menumusic.mp3")
+
 # Initial snake attributes
 snakeHead = [100, 100]
 snakeBody = [snakeHead,
@@ -129,6 +139,9 @@ def startGame():
     print("Fruit location: " + str(fruitLocation))
     print("Fruit sprite location on png: " + str(fruits[fruitSprite]))
     fruitSpawn = False
+
+    # Play game start sound
+    startGameSound.play()
 
 
 # Quits the game
