@@ -34,12 +34,14 @@ py.display.set_icon(icon)
 # Initialize sound mixer
 py.mixer.init()
 
-
 # All sounds
 buttonHoverSound = py.mixer.Sound("sounds/buttonhover.wav")
 startGameSound = py.mixer.Sound("sounds/startgame.ogg")
 scoreCollectSound = py.mixer.Sound("sounds/coincollect.wav")
 bgm = py.mixer.Sound("sounds/menumusic.mp3")
+
+# Bgm music boolean
+needMusic = True
 
 # Initial snake attributes
 snakeHead = [100, 100]
@@ -120,7 +122,7 @@ class Button():
 
 # Starts the main game loop and resets the game attributes
 def startGame():
-    global gameStart, snakeHead, snakeBody, snakeDirection, score, fruitLocation, fruitSpawn, fruitSprite
+    global gameStart, snakeHead, snakeBody, snakeDirection, score, fruitLocation, fruitSpawn, fruitSprite, needMusic
     gameStart = True
 
     # Re-initialize the game attributes
@@ -142,6 +144,8 @@ def startGame():
 
     # Play game start sound
     startGameSound.play()
+    t.sleep(1.5)
+    needMusic = True
 
 
 # Quits the game
@@ -169,6 +173,10 @@ def updateScore():
 
 # Shows the player's final score and ends the game
 def gameOver():
+    global needMusic
+    needMusic = False
+    bgm.stop()  # Stop the background music
+
     gameOverObj = textFont.render("Game Over", True, white)
     gameOverObjRect = gameOverObj.get_rect()
     gameOverObjRect.midtop = (WINDOWXSIZE // 2, WINDOWYSIZE // 2)  # Center text in middle of screen
@@ -217,6 +225,11 @@ def startMenu():
 # Game loop
 while True:
     if gameStart:
+        # Music
+        if needMusic:
+            bgm.play(-1)
+            needMusic = False
+
         # Controls
         for event in py.event.get():
             if event.type == py.QUIT:
