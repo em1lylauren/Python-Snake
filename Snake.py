@@ -12,8 +12,8 @@ py.init()
 screen = py.display.set_mode((WINDOWXSIZE, WINDOWYSIZE))
 py.display.set_caption("Snake")
 
-icon = py.image.load("apple.png")  # Window icon
-fruitSpriteSheet = py.image.load("foods.png")  # Spritesheet for fruits
+icon = py.image.load("sprites/icon.png")  # Window icon
+fruitSpriteSheet = py.image.load("sprites/foods.png")  # Spritesheet for fruits
 py.display.set_icon(icon)
 
 # Initialize sound mixer
@@ -37,8 +37,8 @@ purple = py.Color(142, 36, 170)
 orange = py.Color(247, 28, 0)
 
 # Fonts
-textFont = py.font.Font("PixelDigivolveFont.ttf", 20)
-textFontLarge = py.font.Font("PixelDigivolveFont.ttf", 50)
+textFont = py.font.Font("fonts/PixelDigivolveFont.ttf", 20)
+textFontLarge = py.font.Font("fonts/PixelDigivolveFont.ttf", 50)
 
 
 class Fruit():  # Will flesh this out later
