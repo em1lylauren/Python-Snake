@@ -116,7 +116,7 @@ def quitGame():
     sys.exit()
 
 
-# Updates the rest of the snake position
+# Updates the rest of the snake position to follow the head
 def updateSnakeBody():
     i = len(snakeBody) - 1
 
@@ -127,8 +127,23 @@ def updateSnakeBody():
     snakeBody[1] = oldHead
 
 
+# Draws the snake entity onto the screen
+def drawSnake():
+    # Draw snake
+    for piece in snakeBody:
+        py.draw.rect(screen, green, py.Rect(piece[0], piece[1], 10, 10))
+
+
+# Draws the fruit entity onto the screen
+def drawFruit():
+    # Draw fruit
+    fruit = py.Surface((27, 27))
+    fruit.blit(fruitSpriteSheet, (0, 0), fruits[fruitType])
+    screen.blit(fruit, fruitLocation)
+
+
 # Updates the player's score display
-def updateScore():
+def drawScore():
     scoreObj = textFont.render("Score: " + str(score), True, white)
     screen.blit(scoreObj, scoreObj.get_rect())
 
@@ -212,10 +227,24 @@ def updateFruitLocation():
         fruitSpawn = False
 
 
+# Checks if either of the game over conditions have been reached
+def checkGameOverConditions():
+    # Checking if snake beyond bounds
+    if snakeHead[0] < 0 or snakeHead[1] < 0:
+        gameOver()
+    elif snakeHead[0] > WINDOWXSIZE - 10 or snakeHead[1] > WINDOWYSIZE - 10:
+        gameOver()
+
+    # Checking if snake collides with itself
+    for piece in snakeBody[1:]:
+        if snakeHead[0] == piece[0] and snakeHead[1] == piece[1]:
+            gameOver()
+
+
 # Game loop
 while True:
     snakeSpeed += 0.0001
-    print(snakeSpeed)
+    print(snakeSpeed)  # Debug
     if gameStart:
         # Music
         if needMusic:
@@ -255,32 +284,15 @@ while True:
                 snakeHead[0] += 10
 
         checkFruitCollision()
-
         updateFruitLocation()
 
         screen.fill(black)
 
-        # Draw snake
-        for piece in snakeBody:
-            py.draw.rect(screen, green, py.Rect(piece[0], piece[1], 10, 10))
+        drawSnake()
+        drawFruit()
+        drawScore()
 
-        # Draw fruit
-        fruit = py.Surface((27, 27))
-        fruit.blit(fruitSpriteSheet, (0, 0), fruits[fruitType])
-        screen.blit(fruit, fruitLocation)
-        # Draw score
-        updateScore()
-
-        # Checking if snake beyond bounds (Game over condition)
-        if snakeHead[0] < 0 or snakeHead[1] < 0:
-            gameOver()
-        elif snakeHead[0] > WINDOWXSIZE - 10 or snakeHead[1] > WINDOWYSIZE - 10:
-            gameOver()
-
-        # Checking if snake collides with itself (Game over condition)
-        for piece in snakeBody[1:]:
-            if snakeHead[0] == piece[0] and snakeHead[1] == piece[1]:
-                gameOver()
+        checkGameOverConditions()
 
         # Redraw screen
         py.display.update()
