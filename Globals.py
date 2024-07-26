@@ -29,7 +29,5 @@ fruits = {
     'pineapple': (130, 3, 27, 27),
     'cherry': (5, 38, 27, 27)
 }
+fruitType = rand.choice(list(fruits))
 fruitSpawn = False
-
-# Buttons for start menu
-buttons = []

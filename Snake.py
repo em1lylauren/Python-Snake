@@ -68,7 +68,6 @@ class Button():
         self.buttonSurface = py.Surface((self.width, self.height))
         self.buttonRect = py.Rect(self.x, self.y, self.width, self.height)
         self.buttonSurf = textFont.render(text, True, white)
-        buttons.append(self)
 
     # Updates the graphics of the button
     def updateButton(self):
@@ -90,7 +89,7 @@ class Button():
 
 # Starts the main game loop and resets the game attributes
 def startGame():
-    global gameStart, snakeHead, snakeBody, snakeDirection, score, fruitLocation, fruitSpawn, fruitSprite, needMusic
+    global gameStart, snakeHead, snakeBody, snakeDirection, score, fruitLocation, fruitSpawn, needMusic
     gameStart = True
 
     # Re-initialize the game attributes
@@ -103,12 +102,7 @@ def startGame():
 
     score = 0
 
-    fruitLocation = [rand.randint(10, WINDOWYSIZE) // 10 * 10, rand.randint(10, WINDOWYSIZE) // 10 * 10]
-    fruitSprite = rand.choice(list(fruits))
-    print("Fruit type: " + str(fruitSprite))
-    print("Fruit location: " + str(fruitLocation))
-    print("Fruit sprite location on png: " + str(fruits[fruitSprite]))
-    fruitSpawn = False
+    updateFruitLocation()
 
     # Play game start sound
     startGameSound.play()
@@ -173,6 +167,9 @@ startMenuRect.midtop = (400, 250)  # Center text in middle of screen
 startButton = Button(200, 400, 400, 100, "Start", startGame)
 quitButton = Button(200, 550, 400, 100, "Quit", quitGame)
 
+# Buttons for start menu
+buttons = [startButton, quitButton]
+
 
 def startMenu():
     # Start menu loop
@@ -189,6 +186,30 @@ def startMenu():
 
         py.display.flip()
         clock.tick(snakeSpeed)
+
+
+# Checks for collision between the snake and fruit objects
+def checkFruitCollision():
+    global score, fruitSpawn
+
+    # Check for collision between snake and fruit
+    if (snakeHead[0] in range(fruitLocation[0], fruitLocation[0] + 27)
+            and snakeHead[1] in range(fruitLocation[1], fruitLocation[1] + 27)):
+        scoreCollectSound.play()  # Play sound
+        score += 10
+        snakeBody.append([snakeBody[-1][0], snakeBody[-1][1]])
+        fruitSpawn = True
+
+
+# Updates the new location of a fruit object
+def updateFruitLocation():
+    global fruitSpawn, fruitLocation, fruitType
+
+    # Update fruit location (only one at a time)
+    if fruitSpawn:
+        fruitLocation = [rand.randint(1, WINDOWYSIZE) // 20 * 20, rand.randint(1, WINDOWYSIZE) // 20 * 20]
+        fruitType = rand.choice(list(fruits))
+        fruitSpawn = False
 
 
 # Game loop
@@ -233,19 +254,9 @@ while True:
             case "RIGHT":
                 snakeHead[0] += 10
 
-        # Check for collision between snake and fruit
-        if (snakeHead[0] in range(fruitLocation[0], fruitLocation[0] + 27)
-                and snakeHead[1] in range(fruitLocation[1], fruitLocation[1] + 27)):
-            scoreCollectSound.play()  # Play sound
-            score += 10
-            snakeBody.append([snakeBody[-1][0], snakeBody[-1][1]])
-            fruitSpawn = True
+        checkFruitCollision()
 
-        # Update fruit location (only one at a time)
-        if fruitSpawn:
-            fruitLocation = [rand.randint(1, WINDOWYSIZE) // 20 * 20, rand.randint(1, WINDOWYSIZE) // 20 * 20]
-            fruitSprite = rand.choice(list(fruits))
-            fruitSpawn = False
+        updateFruitLocation()
 
         screen.fill(black)
 
@@ -255,7 +266,7 @@ while True:
 
         # Draw fruit
         fruit = py.Surface((27, 27))
-        fruit.blit(fruitSpriteSheet, (0, 0), fruits[fruitSprite])
+        fruit.blit(fruitSpriteSheet, (0, 0), fruits[fruitType])
         screen.blit(fruit, fruitLocation)
         # Draw score
         updateScore()
