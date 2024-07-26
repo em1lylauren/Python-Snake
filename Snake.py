@@ -37,6 +37,7 @@ py.mixer.init()
 # All sounds
 buttonHoverSound = py.mixer.Sound("sounds/buttonhover.wav")
 startGameSound = py.mixer.Sound("sounds/startgame.ogg")
+gameOverSound = py.mixer.Sound("sounds/gameover.wav")
 scoreCollectSound = py.mixer.Sound("sounds/coincollect.wav")
 bgm = py.mixer.Sound("sounds/menumusic.mp3")
 
@@ -176,6 +177,7 @@ def gameOver():
     global needMusic
     needMusic = False
     bgm.stop()  # Stop the background music
+    gameOverSound.play()
 
     gameOverObj = textFont.render("Game Over", True, white)
     gameOverObjRect = gameOverObj.get_rect()
