@@ -118,6 +118,7 @@ def quitGame():
 
 # Updates the rest of the snake position to follow the head
 def updateSnakeBody():
+    oldHead = [snakeHead[0], snakeHead[1]]
     i = len(snakeBody) - 1
 
     while i > 1:
@@ -242,63 +243,65 @@ def checkGameOverConditions():
 
 
 # Game loop
-while True:
-    snakeSpeed += 0.0001
-    print(snakeSpeed)  # Debug
-    if gameStart:
-        # Music
-        if needMusic:
-            bgm.play(-1)
-            needMusic = False
+def Game():
+    global snakeSpeed, snakeDirection, needMusic
 
-        # Controls
-        for event in py.event.get():
-            if event.type == py.QUIT:
-                quitGame()
+    while True:
+        snakeSpeed += 0.0001
+        print(snakeSpeed)  # Debug
+        if gameStart:
+            # Music
+            if needMusic:
+                bgm.play(-1)
+                needMusic = False
 
-            if event.type == py.KEYDOWN:
-                if event.key == py.K_UP or event.key == py.K_w:
-                    if snakeDirection != "DOWN":  # Can't move up if moving down
-                        snakeDirection = "UP"
-                if event.key == py.K_DOWN or event.key == py.K_s:
-                    if snakeDirection != "UP":  # Can't move down if moving up
-                        snakeDirection = "DOWN"
-                if event.key == py.K_LEFT or event.key == py.K_a:
-                    if snakeDirection != "RIGHT":  # Can't move left if moving right
-                        snakeDirection = "LEFT"
-                if event.key == py.K_RIGHT or event.key == py.K_d:
-                    if snakeDirection != "LEFT":  # Can't move right if moving left
-                        snakeDirection = "RIGHT"
+            # Controls
+            for event in py.event.get():
+                if event.type == py.QUIT:
+                    quitGame()
 
-        # Update snake position
-        oldHead = [snakeHead[0], snakeHead[1]]
-        updateSnakeBody()
-        match snakeDirection:
-            case "UP":
-                snakeHead[1] -= 10
-            case "DOWN":
-                snakeHead[1] += 10
-            case "LEFT":
-                snakeHead[0] -= 10
-            case "RIGHT":
-                snakeHead[0] += 10
+                if event.type == py.KEYDOWN:
+                    if event.key == py.K_UP or event.key == py.K_w:
+                        if snakeDirection != "DOWN":  # Can't move up if moving down
+                            snakeDirection = "UP"
+                    if event.key == py.K_DOWN or event.key == py.K_s:
+                        if snakeDirection != "UP":  # Can't move down if moving up
+                            snakeDirection = "DOWN"
+                    if event.key == py.K_LEFT or event.key == py.K_a:
+                        if snakeDirection != "RIGHT":  # Can't move left if moving right
+                            snakeDirection = "LEFT"
+                    if event.key == py.K_RIGHT or event.key == py.K_d:
+                        if snakeDirection != "LEFT":  # Can't move right if moving left
+                            snakeDirection = "RIGHT"
 
-        checkFruitCollision()
-        updateFruitLocation()
+            updateSnakeBody()
 
-        screen.fill(black)
+            match snakeDirection:
+                case "UP":
+                    snakeHead[1] -= 10
+                case "DOWN":
+                    snakeHead[1] += 10
+                case "LEFT":
+                    snakeHead[0] -= 10
+                case "RIGHT":
+                    snakeHead[0] += 10
 
-        drawSnake()
-        drawFruit()
-        drawScore()
+            checkFruitCollision()
+            updateFruitLocation()
 
-        checkGameOverConditions()
+            screen.fill(black)
 
-        # Redraw screen
-        py.display.update()
+            drawSnake()
+            drawFruit()
+            drawScore()
 
-        # Update clock
-        clock.tick(snakeSpeed)
+            checkGameOverConditions()
 
-    else:
-        startMenu()
+            # Redraw screen
+            py.display.update()
+
+            # Update clock
+            clock.tick(snakeSpeed)
+
+        else:
+            startMenu()
