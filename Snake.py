@@ -1,15 +1,30 @@
 import sys
-
-import pygame as py
 import time as t
-import random as rand
+import pygame as py
 
-# Window size
-WINDOWXSIZE = 800
-WINDOWYSIZE = 800
+from Globals import *  # Import variables from other file
 
 clock = py.time.Clock()
 gameStart = False  # Determines weather we are in the main game loop or not
+
+# Initialization
+py.init()
+screen = py.display.set_mode((WINDOWXSIZE, WINDOWYSIZE))
+py.display.set_caption("Snake")
+
+icon = py.image.load("apple.png")  # Window icon
+fruitSpriteSheet = py.image.load("foods.png")  # Spritesheet for fruits
+py.display.set_icon(icon)
+
+# Initialize sound mixer
+py.mixer.init()
+
+# Sounds and music
+buttonHoverSound = py.mixer.Sound("sounds/buttonhover.wav")
+startGameSound = py.mixer.Sound("sounds/startgame.ogg")
+gameOverSound = py.mixer.Sound("sounds/gameover.wav")
+scoreCollectSound = py.mixer.Sound("sounds/coincollect.wav")
+bgm = py.mixer.Sound("sounds/menumusic.mp3")
 
 # Colours
 black = py.Color(0, 0, 0)
@@ -21,64 +36,16 @@ yellow = py.Color(255, 235, 59)
 purple = py.Color(142, 36, 170)
 orange = py.Color(247, 28, 0)
 
-# Initialization
-py.init()
-screen = py.display.set_mode((WINDOWXSIZE, WINDOWYSIZE))
-py.display.set_caption("Snake")
-
+# Fonts
 textFont = py.font.Font("PixelDigivolveFont.ttf", 20)
 textFontLarge = py.font.Font("PixelDigivolveFont.ttf", 50)
-icon = py.image.load("apple.png")
-py.display.set_icon(icon)
-
-# Initialize sound mixer
-py.mixer.init()
-
-# All sounds
-buttonHoverSound = py.mixer.Sound("sounds/buttonhover.wav")
-startGameSound = py.mixer.Sound("sounds/startgame.ogg")
-gameOverSound = py.mixer.Sound("sounds/gameover.wav")
-scoreCollectSound = py.mixer.Sound("sounds/coincollect.wav")
-bgm = py.mixer.Sound("sounds/menumusic.mp3")
-
-# Bgm music boolean
-needMusic = True
-
-# Initial snake attributes
-snakeHead = [100, 100]
-snakeBody = [snakeHead,
-             [100, 90],
-             [100, 80],
-             [100, 70]]
-snakeDirection = "RIGHT"
-snakeSpeed = 15
-
-# Score
-score = 0
 
 
-class Fruit():
+class Fruit():  # Will flesh this out later
     def __init__(self, x, y, image):
         self.x = x  # x location on screen
         self.y = y  # y location on screen
         self.image = image  # image of the fruit
-
-
-# Initial fruit attributes
-fruitLocation = [rand.randint(10, WINDOWYSIZE) // 10 * 10, rand.randint(10, WINDOWYSIZE) // 10 * 10]
-fruitSpriteSheet = py.image.load("foods.png")
-fruits = {
-    'banana': (0, 2, 27, 27),
-    'orange': (38, 5, 27, 27),
-    'apple': (68, 4, 27, 27),
-    'watermelon': (99, 10, 27, 27),
-    'pineapple': (130, 3, 27, 27),
-    'cherry': (5, 38, 27, 27)
-}
-fruitSpawn = False
-
-# Buttons for start menu
-buttons = []
 
 
 # A class for the menu buttons
