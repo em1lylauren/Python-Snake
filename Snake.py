@@ -264,6 +264,7 @@ while True:
 
         # Check for collision between snake and fruit
         if snakeHead[0] == fruitLocation[0] and snakeHead[1] == fruitLocation[1]:
+            scoreCollectSound.play() # Play sound
             score += 10
             snakeBody.append([snakeBody[-1][0], snakeBody[-1][1]])
             fruitSpawn = True
