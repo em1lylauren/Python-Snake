@@ -226,6 +226,8 @@ def startMenu():
 
 # Game loop
 while True:
+    snakeSpeed += 0.0001
+    print(snakeSpeed)
     if gameStart:
         # Music
         if needMusic:
@@ -276,9 +278,6 @@ while True:
         if fruitSpawn:
             fruitLocation = [rand.randint(1, WINDOWYSIZE) // 20 * 20, rand.randint(1, WINDOWYSIZE) // 20 * 20]
             fruitSprite = rand.choice(list(fruits))
-            print("Fruit type: " + str(fruitSprite))
-            print("Fruit location: " + str(fruitLocation))
-            print("Fruit sprite location on png: " + str(fruits[fruitSprite]))
             fruitSpawn = False
 
         screen.fill(black)
