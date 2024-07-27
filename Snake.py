@@ -87,6 +87,10 @@ class Button():
         screen.blit(self.buttonSurface, self.buttonRect)
 
 
+def seeHighScores():
+    print("High scores")
+
+
 # Starts the main game loop and resets the game attributes
 def startGame():
     global gameStart, snakeHead, snakeBody, snakeDirection, score, fruitLocation, fruitSpawn, needMusic
@@ -181,11 +185,12 @@ def startMenu():
     startMenuText = textFontLarge.render("Snake", True, green)
     startMenuRect = startMenuText.get_rect()
     startMenuRect.midtop = (400, 250)  # Center text in middle of screen
-    startButton = Button(200, 400, 400, 100, "Start", startGame)
-    quitButton = Button(200, 550, 400, 100, "Quit", quitGame)
+    startButton = Button(200, 350, 400, 100, "Start", startGame)
+    highScoreButton = Button(200, 460, 400, 100, "High Scores", seeHighScores)
+    quitButton = Button(200, 570, 400, 100, "Quit", quitGame)
 
     # Buttons for start menu
-    buttons = [startButton, quitButton]
+    buttons = [startButton, highScoreButton, quitButton]
 
     # Start menu loop
     while not gameStart:
