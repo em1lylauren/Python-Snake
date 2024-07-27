@@ -5,7 +5,7 @@ import pygame as py
 from Globals import *  # Import variables from other file
 
 clock = py.time.Clock()
-gameStart = False  # Determines weather we are in the main game loop or not
+gameStart = False  # Determines whether we are in the main game loop or not
 
 # Initialization
 py.init()
@@ -177,17 +177,16 @@ def gameOver():
     gameStart = False
 
 
-startMenuText = textFontLarge.render("Snake", True, green)
-startMenuRect = startMenuText.get_rect()
-startMenuRect.midtop = (400, 250)  # Center text in middle of screen
-startButton = Button(200, 400, 400, 100, "Start", startGame)
-quitButton = Button(200, 550, 400, 100, "Quit", quitGame)
-
-# Buttons for start menu
-buttons = [startButton, quitButton]
-
-
 def startMenu():
+    startMenuText = textFontLarge.render("Snake", True, green)
+    startMenuRect = startMenuText.get_rect()
+    startMenuRect.midtop = (400, 250)  # Center text in middle of screen
+    startButton = Button(200, 400, 400, 100, "Start", startGame)
+    quitButton = Button(200, 550, 400, 100, "Quit", quitGame)
+
+    # Buttons for start menu
+    buttons = [startButton, quitButton]
+
     # Start menu loop
     while not gameStart:
         screen.fill(black)
