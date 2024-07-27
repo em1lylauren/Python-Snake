@@ -87,8 +87,34 @@ class Button():
         screen.blit(self.buttonSurface, self.buttonRect)
 
 
+# Draws a single line of text at the given x and y coordinate on screen.
+def drawText(text, size, colour, x, y):
+    font = py.font.Font("fonts/PixelDigivolveFont.ttf", size)
+    textSurface = font.render(text, True, colour)
+    screen.blit(textSurface, (x, y))
+
+
 def seeHighScores():
-    print("High scores")
+    global gameStart
+    gameStart = False
+
+    scores = {"Name": 0,
+              "Name2": 0,
+              "Name3": 0,
+              "Name4": 0,
+              "Name5": 0,
+              "Name6": 0,
+              "Name7": 0,
+              "Name8": 0,
+              "Name9": 0}
+
+    while True:
+        screen.fill(black)
+
+        yPos = 20
+        for name in scores:
+            drawText(name + " " + str(scores[name]), 30, white, WINDOWXSIZE / 2, yPos)
+            yPos += 35
 
 
 # Starts the main game loop and resets the game attributes
@@ -149,8 +175,7 @@ def drawFruit():
 
 # Updates the player's score display
 def drawScore():
-    scoreObj = textFont.render("Score: " + str(score), True, white)
-    screen.blit(scoreObj, scoreObj.get_rect())
+    drawText("Score: " + str(score), 20, white, 5, 5)
 
 
 # Shows the player's final score and ends the game
