@@ -94,6 +94,7 @@ def drawText(text, size, colour, x, y):
     screen.blit(textSurface, (x, y))
 
 
+# Shows the high score screen (debug, crashes)
 def seeHighScores():
     global gameStart
     gameStart = False
@@ -185,20 +186,13 @@ def gameOver():
     bgm.stop()  # Stop the background music
     gameOverSound.play()
 
-    gameOverObj = textFont.render("Game Over", True, white)
-    gameOverObjRect = gameOverObj.get_rect()
-    gameOverObjRect.midtop = (WINDOWXSIZE // 2, WINDOWYSIZE // 2)  # Center text in middle of screen
-
-    screen.blit(gameOverObj, gameOverObjRect)
+    drawText("Game Over", 30, white, 300, 400)
     py.display.flip()
-
     t.sleep(3)
 
     screen.fill(black)
-    gameOverObj = textFont.render("Final score: " + str(score), True, white)
-    screen.blit(gameOverObj, gameOverObjRect)
+    drawText("Final score: " + str(score), 30, white, 300, 400)
     py.display.flip()
-
     t.sleep(3)
 
     # Go back to the main menu
@@ -207,9 +201,6 @@ def gameOver():
 
 
 def startMenu():
-    startMenuText = textFontLarge.render("Snake", True, green)
-    startMenuRect = startMenuText.get_rect()
-    startMenuRect.midtop = (400, 250)  # Center text in middle of screen
     startButton = Button(200, 350, 400, 100, "Start", startGame)
     highScoreButton = Button(200, 460, 400, 100, "High Scores", seeHighScores)
     quitButton = Button(200, 570, 400, 100, "Quit", quitGame)
@@ -220,14 +211,14 @@ def startMenu():
     # Start menu loop
     while not gameStart:
         screen.fill(black)
+        drawText("Snake", 50, green, 320, 250)
+
         for menuEvent in py.event.get():
             if menuEvent.type == py.QUIT:
                 quitGame()
 
         for button in buttons:
             button.updateButton()
-
-        screen.blit(startMenuText, startMenuRect)
 
         py.display.flip()
         clock.tick(snakeSpeed)
@@ -278,6 +269,7 @@ def Game():
     while True:
         snakeSpeed += 0.0001
         print(snakeSpeed)  # Debug
+
         if gameStart:
             # Music
             if needMusic:
