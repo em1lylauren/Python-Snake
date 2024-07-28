@@ -1,4 +1,5 @@
-import sys
+import json as json
+import sys as sys
 import time as t
 import pygame as py
 
@@ -99,15 +100,8 @@ def seeHighScores():
     global gameStart
     gameStart = False
 
-    scores = {"Name": 0,
-              "Name2": 0,
-              "Name3": 0,
-              "Name4": 0,
-              "Name5": 0,
-              "Name6": 0,
-              "Name7": 0,
-              "Name8": 0,
-              "Name9": 0}
+    file = open("highscores.json", "r+")
+    scores = json.load(file)
 
     backButton = Button(5, 5, 100, 50, "Back", startMenu)
 
@@ -117,10 +111,10 @@ def seeHighScores():
     while True:
         screen.fill(black)
 
-        yPos = 20
+        yPos = 200
         for name in scores:
             drawText(name + " " + str(scores[name]), 30, white, 325, yPos)
-            yPos += 35
+            yPos += 40
 
         for menuEvent in py.event.get():
             if menuEvent.type == py.QUIT:
