@@ -97,20 +97,23 @@ def drawText(text, size, colour, x, y):
 
 # Shows the high score screen (debug, crashes)
 def seeHighScores():
-    global gameStart
+    global gameStart, backToStartMenu
     gameStart = False
+    backToStartMenu = False
 
+    # Imports highscores from file
     file = open("highscores.json", "r+")
     scores = json.load(file)
+    file.close()
 
-    backButton = Button(5, 5, 100, 50, "Back", startMenu)
-
-    # Buttons for start menu
+    # Back button
+    backButton = Button(5, 5, 100, 50, "Back", backToMenu)
     buttons = [backButton]
 
-    while True:
+    while not backToStartMenu:
         screen.fill(black)
 
+        # Draw 10 high scores on screen
         yPos = 200
         for name in scores:
             drawText(name + " " + str(scores[name]), 30, white, 325, yPos)
@@ -127,10 +130,18 @@ def seeHighScores():
         clock.tick(snakeSpeed)
 
 
+# Sends the player back to the main menu from the high score screen
+def backToMenu():
+    global backToStartMenu
+    backToStartMenu = True
+    screen.fill(black)
+
+
 # Starts the main game loop and resets the game attributes
 def startGame():
     global gameStart, snakeHead, snakeBody, snakeDirection, score, fruitLocation, fruitSpawn, needMusic
     gameStart = True
+    screen.fill(black)
 
     # Re-initialize the game attributes
     snakeHead = [100, 100]
@@ -276,10 +287,10 @@ def Game():
     global snakeSpeed, snakeDirection, needMusic
 
     while True:
-        snakeSpeed += 0.0001
-        print(snakeSpeed)  # Debug
-
         if gameStart:
+            snakeSpeed += 0.0001
+            print(snakeSpeed)  # Debug
+
             # Music
             if needMusic:
                 bgm.play(-1)

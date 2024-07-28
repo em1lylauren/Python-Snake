@@ -7,6 +7,9 @@ WINDOWYSIZE = 800
 # Bgm music boolean
 needMusic = True
 
+# Sends the player back to the main menu (from the high score screen) if true
+backToStartMenu = False
+
 # Initial snake attributes
 snakeHead = [100, 100]
 snakeBody = [snakeHead,
