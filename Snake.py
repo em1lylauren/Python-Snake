@@ -117,6 +117,13 @@ def seeHighScores():
             drawText(name + " " + str(scores[name]), 30, white, WINDOWXSIZE / 2, yPos)
             yPos += 35
 
+        for menuEvent in py.event.get():
+            if menuEvent.type == py.QUIT:
+                quitGame()
+
+        py.display.flip()
+        clock.tick(snakeSpeed)
+
 
 # Starts the main game loop and resets the game attributes
 def startGame():
