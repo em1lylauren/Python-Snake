@@ -18,6 +18,7 @@ snakeBody = [snakeHead,
              [100, 70]]
 snakeDirection = "RIGHT"
 snakeSpeed = 15
+fps = 60 # For smooth menu transitions
 
 # Score
 score = 0

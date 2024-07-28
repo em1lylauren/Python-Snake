@@ -101,6 +101,8 @@ def seeHighScores():
     gameStart = False
     backToStartMenu = False
 
+    screen.fill(black)
+
     # Imports highscores from file
     file = open("highscores.json", "r+")
     scores = json.load(file)
@@ -222,6 +224,9 @@ def gameOver():
 
 
 def startMenu():
+    global snakeSpeed
+    snakeSpeed = 60 # For smoother menu transitions
+
     startButton = Button(200, 350, 400, 100, "Start", startGame)
     highScoreButton = Button(200, 460, 400, 100, "High Scores", seeHighScores)
     quitButton = Button(200, 570, 400, 100, "Quit", quitGame)
