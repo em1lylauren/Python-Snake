@@ -109,17 +109,25 @@ def seeHighScores():
               "Name8": 0,
               "Name9": 0}
 
+    backButton = Button(5, 5, 100, 50, "Back", startMenu)
+
+    # Buttons for start menu
+    buttons = [backButton]
+
     while True:
         screen.fill(black)
 
         yPos = 20
         for name in scores:
-            drawText(name + " " + str(scores[name]), 30, white, WINDOWXSIZE / 2, yPos)
+            drawText(name + " " + str(scores[name]), 30, white, 325, yPos)
             yPos += 35
 
         for menuEvent in py.event.get():
             if menuEvent.type == py.QUIT:
                 quitGame()
+
+        for button in buttons:
+            button.updateButton()
 
         py.display.flip()
         clock.tick(snakeSpeed)
