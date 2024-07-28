@@ -139,7 +139,7 @@ def backToMenu():
 
 # Starts the main game loop and resets the game attributes
 def startGame():
-    global gameStart, snakeHead, snakeBody, snakeDirection, score, fruitLocation, fruitSpawn, needMusic
+    global gameStart, snakeHead, snakeBody, snakeSpeed, snakeDirection, score, fruitLocation, fruitSpawn, needMusic
     gameStart = True
     screen.fill(black)
 
@@ -152,6 +152,7 @@ def startGame():
     snakeDirection = "RIGHT"
 
     score = 0
+    snakeSpeed = 15
 
     updateFruitLocation()
 
