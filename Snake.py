@@ -80,6 +80,7 @@ class Button():
 
             if py.mouse.get_pressed(num_buttons=3)[0]:
                 self.buttonSurface.fill(self.fillColors["pressed"])
+                buttonHoverSound.play()
                 self.onClickFunction()
 
         self.buttonSurface.blit(self.buttonSurf, [self.buttonRect.width / 2 - self.buttonSurf.get_rect().width / 2,
