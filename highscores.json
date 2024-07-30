@@ -1,11 +1,38 @@
-{
-  "Name": 0,
-  "Name2": 0,
-  "Name3": 0,
-  "Name4": 0,
-  "Name5": 0,
-  "Name6": 0,
-  "Name7": 0,
-  "Name8": 0,
-  "Name9": 0
-}
+[
+  {
+    "name": "Name1",
+    "score": 0
+  },
+    {
+    "name": "Name2",
+    "score": 0
+  },
+    {
+    "name": "Name3",
+    "score": 0
+  },
+    {
+    "name": "Name4",
+    "score": 0
+  },
+    {
+    "name": "Name5",
+    "score": 0
+  },
+    {
+    "name": "Name6",
+    "score": 0
+  },
+    {
+    "name": "Name7",
+    "score": 0
+  },
+    {
+    "name": "Name8",
+    "score": 0
+  },
+    {
+    "name": "Name9",
+    "score": 0
+  }
+]
