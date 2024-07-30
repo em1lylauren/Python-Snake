@@ -112,8 +112,8 @@ def seeHighScores():
 
         # Draw 10 high scores on screen
         yPos = 200
-        for name in scores:
-            drawText(name + " " + str(scores[name]), 30, white, 325, yPos)
+        for score in scores:
+            drawText(score['name'] + " " + str(score['score']), 30, white, 325, yPos)
             yPos += 40
 
         for menuEvent in py.event.get():
