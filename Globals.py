@@ -27,7 +27,6 @@ score = 0
 # Highscores from file
 file = open("highscores.json", "r+")
 scores = json.load(file)
-print(scores)
 file.close()
 
 # Initial fruit attributes
