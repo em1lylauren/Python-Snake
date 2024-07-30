@@ -24,7 +24,7 @@ fps = 60 # For smooth menu transitions
 # Current player score
 score = 0
 
-# Highscores from file
+# Leaderboard scores
 file = open("highscores.json", "r+")
 scores = json.load(file)
 file.close()

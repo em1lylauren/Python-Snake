@@ -2,6 +2,7 @@ import sys as sys
 import time as t
 import pygame as py
 
+from Highscores import *
 from Globals import *  # Import variables from other file
 
 clock = py.time.Clock()
@@ -112,9 +113,9 @@ def seeHighScores():
 
         # Draw 10 high scores on screen
         yPos = 200
-        for score in scores:
-            drawText(str(score['name']), 30, white, 260, yPos)
-            drawText(str(score['score']), 30, white, 450, yPos)
+        for s in scores:
+            drawText(str(s['name']), 30, white, 260, yPos)
+            drawText(str(s['score']), 30, white, 450, yPos)
             yPos += 40
 
         for menuEvent in py.event.get():
@@ -162,6 +163,7 @@ def startGame():
 
 # Quits the game
 def quitGame():
+    writeToScoresFile()
     py.quit()
     sys.exit()
 
@@ -213,6 +215,14 @@ def gameOver():
     drawText("Final score: " + str(score), 30, white, 300, 400)
     py.display.flip()
     t.sleep(3)
+
+    # If player's score is high enough to land on the leaderboard
+    if checkIfScoreIsOnLeaderboard(score):
+        name = "Test"
+        addScore(createScoreDictObject(name, score))
+
+        global scores
+        scores = sortScores()
 
     # Go back to the main menu
     global gameStart
