@@ -1,3 +1,4 @@
+import json
 import random as rand
 
 # Window size
@@ -20,8 +21,13 @@ snakeDirection = "RIGHT"
 snakeSpeed = 15
 fps = 60 # For smooth menu transitions
 
-# Score
+# Current player score
 score = 0
+
+# Highscores from file
+file = open("highscores.json", "r+")
+scores = json.load(file)
+file.close()
 
 # Initial fruit attributes
 fruitLocation = [rand.randint(10, WINDOWYSIZE) // 10 * 10, rand.randint(10, WINDOWYSIZE) // 10 * 10]

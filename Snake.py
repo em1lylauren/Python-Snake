@@ -1,4 +1,3 @@
-import json as json
 import sys as sys
 import time as t
 import pygame as py
@@ -103,11 +102,6 @@ def seeHighScores():
     backToStartMenu = False
 
     screen.fill(black)
-
-    # Imports highscores from file
-    file = open("highscores.json", "r+")
-    scores = json.load(file)
-    file.close()
 
     # Back button
     backButton = Button(5, 5, 100, 50, "Back", backToMenu)
