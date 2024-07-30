@@ -28,8 +28,9 @@ def writeToScoresFile():
         scoresFile.close()
 
 
-sortScores()
-print(scores)
-addScore({'name': "Emily", 'score': 420})
-print(scores)
-writeToScoresFile()
+# Checks if the current player score is high enough to place in the top 10 high scores.
+def checkIfScoreIsOnLeaderboard(score):
+    if score > scores[-1]['score']:
+        return True
+    else:
+        return False
