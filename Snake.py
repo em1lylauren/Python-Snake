@@ -249,6 +249,10 @@ def startMenu():
             if menuEvent.type == py.QUIT:
                 quitGame()
 
+            if menuEvent.type == py.KEYDOWN:
+                if menuEvent.key == py.K_SPACE:
+                    getNameForHighscore()
+
         for button in buttons:
             button.updateButton()
 
@@ -341,7 +345,11 @@ def getNameForHighscore():
                         buttonHoverSound.play()
 
                     else:
-                        userName += event.unicode
+                        if event.unicode.isalnum():
+                            userName += event.unicode
+
+                        else:
+                            buttonHoverSound.play()
 
         for button in buttons:
             button.updateButton()
