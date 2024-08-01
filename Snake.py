@@ -25,6 +25,7 @@ buttonHoverSound = py.mixer.Sound("sounds/buttonhover.wav")
 startGameSound = py.mixer.Sound("sounds/startgame.ogg")
 gameOverSound = py.mixer.Sound("sounds/gameover.wav")
 scoreCollectSound = py.mixer.Sound("sounds/coincollect.wav")
+itemSound = py.mixer.Sound("sounds/itemsound.mp3")
 bgm = py.mixer.Sound("sounds/menumusic.mp3")
 
 # Colours
@@ -133,7 +134,6 @@ def seeHighScores():
 def backToMenu():
     global backToStartMenu
     backToStartMenu = True
-    screen.fill(black)
 
 
 # Starts the main game loop and resets the game attributes
@@ -218,11 +218,13 @@ def gameOver():
 
     # If player's score is high enough to land on the leaderboard
     if checkIfScoreIsOnLeaderboard(score):
-        name = "Test"
+        name = getNameForHighscore()
         addScore(createScoreDictObject(name, score))
 
         global scores
         scores = sortScores()
+
+        writeToScoresFile()
 
     # Go back to the main menu
     global gameStart
@@ -231,7 +233,7 @@ def gameOver():
 
 def startMenu():
     global snakeSpeed
-    snakeSpeed = 60 # For smoother menu transitions
+    snakeSpeed = 60  # For smoother menu transitions
 
     startButton = Button(200, 350, 400, 100, "Start", startGame)
     highScoreButton = Button(200, 460, 400, 100, "High Scores", seeHighScores)
@@ -292,6 +294,60 @@ def checkGameOverConditions():
     for piece in snakeBody[1:]:
         if snakeHead[0] == piece[0] and snakeHead[1] == piece[1]:
             gameOver()
+
+
+# Prompts the user to enter their name
+def getNameForHighscore():
+    global backToStartMenu
+    backToStartMenu = False
+
+    itemSound.play()
+
+    screen.fill(black)
+
+    # Enter button
+    enterButton = Button(575, 425, 100, 50, "Enter", backToMenu)
+    buttons = [enterButton]
+
+    userName = ""
+
+    while not backToStartMenu:
+        # Draw title text
+        drawText("You've reached a new high score! Enter your name ", 20, white, 100, 300)
+        drawText("for the leaderboard (max 5 characters): ", 20, white, 100, 325)
+
+        # Draw input text inside of square
+        py.draw.rect(screen, white, py.Rect(200, 400, 350, 100))
+        drawText(userName, 50, green, 290, 425)
+
+        for event in py.event.get():
+            if event.type == py.QUIT:
+                quitGame()
+
+            # Check for keyboard input
+            if event.type == py.KEYDOWN:
+
+                if event.key == py.K_BACKSPACE:
+                    userName = userName[:-1]
+
+                elif event.key == py.K_RETURN:
+                    return userName
+
+                else:
+                    # Make sure name doesn't go over 5 characters (or else replace existing chars)
+                    if len(userName) >= 5:
+                        buttonHoverSound.play()
+
+                    else:
+                        userName += event.unicode
+
+        for button in buttons:
+            button.updateButton()
+
+        py.display.flip()
+        clock.tick(snakeSpeed)
+
+    return userName
 
 
 # Game loop
