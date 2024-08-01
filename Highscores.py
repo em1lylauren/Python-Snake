@@ -21,11 +21,9 @@ def createScoreDictObject(name, newScore):
 
 
 # Writes the new list of scores to the highscores.json file
-def writeToScoresFile():
-    global scores
-
+def writeToScoresFile(scoreList):
     with open('highscores.json', 'w') as scoresFile:
-        json.dump(scores, scoresFile)
+        json.dump(scoreList, scoresFile)
         scoresFile.close()
 
 

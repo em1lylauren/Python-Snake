@@ -163,7 +163,6 @@ def startGame():
 
 # Quits the game
 def quitGame():
-    writeToScoresFile()
     py.quit()
     sys.exit()
 
@@ -223,8 +222,7 @@ def gameOver():
 
         global scores
         scores = sortScores()
-
-        writeToScoresFile()
+        writeToScoresFile(scores)
 
     # Go back to the main menu
     global gameStart
@@ -328,7 +326,11 @@ def getNameForHighscore():
             if event.type == py.KEYDOWN:
 
                 if event.key == py.K_BACKSPACE:
-                    userName = userName[:-1]
+                    if len(userName) <= 0:
+                        buttonHoverSound.play()
+
+                    else:
+                        userName = userName[:-1]
 
                 elif event.key == py.K_RETURN:
                     return userName
