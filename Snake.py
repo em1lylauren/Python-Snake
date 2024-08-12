@@ -265,8 +265,8 @@ def checkFruitCollision():
     global score, fruitSpawn
 
     # Check for collision between snake and fruit
-    if (snakeHead[0] in range(fruitLocation[0], fruitLocation[0] + 27)
-            and snakeHead[1] in range(fruitLocation[1], fruitLocation[1] + 27)):
+    if (snakeHead[0] in range(fruitLocation[0] - 27, fruitLocation[0] + 27)
+            and snakeHead[1] in range(fruitLocation[1] - 27, fruitLocation[1] + 27)):
         scoreCollectSound.play()  # Play sound
         score += 10
         snakeBody.append([snakeBody[-1][0], snakeBody[-1][1]])
@@ -279,7 +279,7 @@ def updateFruitLocation():
 
     # Update fruit location (only one at a time)
     if fruitSpawn:
-        fruitLocation = [rand.randint(1, WINDOWYSIZE) // 20 * 20, rand.randint(1, WINDOWYSIZE) // 20 * 20]
+        fruitLocation = [rand.randint(27 * 2, WINDOWYSIZE) - 27, rand.randint(27 * 2, WINDOWYSIZE) - 27]
         fruitType = rand.choice(list(fruits))
         fruitSpawn = False
 
