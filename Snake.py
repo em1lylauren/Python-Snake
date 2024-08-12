@@ -43,11 +43,33 @@ textFont = py.font.Font("fonts/PixelDigivolveFont.ttf", 20)
 textFontLarge = py.font.Font("fonts/PixelDigivolveFont.ttf", 50)
 
 
-class Fruit():  # Will flesh this out later
-    def __init__(self, x, y, image):
+# Class for fruit objects
+class Fruit():
+    # Creates a new instance of the fruit class
+    def __init__(self, x, y, fruitType):
         self.x = x  # x location on screen
         self.y = y  # y location on screen
-        self.image = image  # image of the fruit
+        self.type = fruitType  # type of fruit
+        self.imageCoords = fruits[self.type]  # coordinates of image on spritesheet
+        self.mask = py.mask.Mask((27, 27), True)  # collision detection
+
+    # Draws the fruit instance on the screen
+    def drawFruit(self):
+        # Draw fruit
+        fruit = py.Surface((27, 27))
+        fruit.blit(fruitSpriteSheet, (0, 0), self.imageCoords)
+        screen.blit(fruit, (self.x, self.y))
+
+    def checkCollision(self):
+        global score, fruitSpawn
+
+        # Check for collision between snake and fruit
+        if (snakeHead[0] in range(self.x - 27, self.x + 27)
+                and snakeHead[1] in range(self.y - 27, self.y + 27)):
+            scoreCollectSound.play()  # Play sound
+            score += 10
+            snakeBody.append([snakeBody[-1][0], snakeBody[-1][1]])
+            fruitSpawn = True
 
 
 # A class for the menu buttons
@@ -138,7 +160,7 @@ def backToMenu():
 
 # Starts the main game loop and resets the game attributes
 def startGame():
-    global gameStart, snakeHead, snakeBody, snakeSpeed, snakeDirection, score, fruitLocation, fruitSpawn, needMusic
+    global gameStart, snakeHead, snakeBody, snakeSpeed, snakeDirection, score, fruitLocation, needMusic
     gameStart = True
     screen.fill(black)
 
@@ -152,8 +174,6 @@ def startGame():
 
     score = 0
     snakeSpeed = 15
-
-    updateFruitLocation()
 
     # Play game start sound
     startGameSound.play()
@@ -184,14 +204,6 @@ def drawSnake():
     # Draw snake
     for piece in snakeBody:
         py.draw.rect(screen, green, py.Rect(piece[0], piece[1], 10, 10))
-
-
-# Draws the fruit entity onto the screen
-def drawFruit():
-    # Draw fruit
-    fruit = py.Surface((27, 27))
-    fruit.blit(fruitSpriteSheet, (0, 0), fruits[fruitType])
-    screen.blit(fruit, fruitLocation)
 
 
 # Updates the player's score display
@@ -260,28 +272,14 @@ def startMenu():
         clock.tick(snakeSpeed)
 
 
-# Checks for collision between the snake and fruit objects
-def checkFruitCollision():
-    global score, fruitSpawn
-
-    # Check for collision between snake and fruit
-    if (snakeHead[0] in range(fruitLocation[0] - 27, fruitLocation[0] + 27)
-            and snakeHead[1] in range(fruitLocation[1] - 27, fruitLocation[1] + 27)):
-        scoreCollectSound.play()  # Play sound
-        score += 10
-        snakeBody.append([snakeBody[-1][0], snakeBody[-1][1]])
-        fruitSpawn = True
-
-
 # Updates the new location of a fruit object
 def updateFruitLocation():
-    global fruitSpawn, fruitLocation, fruitType
+    x = rand.randint(27 * 2, WINDOWYSIZE) - 27
+    y = rand.randint(27 * 2, WINDOWYSIZE) - 27
+    fruitType = rand.choice(list(fruits))
+    fruit = Fruit(x, y, fruitType)
 
-    # Update fruit location (only one at a time)
-    if fruitSpawn:
-        fruitLocation = [rand.randint(27 * 2, WINDOWYSIZE) - 27, rand.randint(27 * 2, WINDOWYSIZE) - 27]
-        fruitType = rand.choice(list(fruits))
-        fruitSpawn = False
+    return fruit
 
 
 # Checks if either of the game over conditions have been reached
@@ -362,7 +360,7 @@ def getNameForHighscore():
 
 # Game loop
 def Game():
-    global snakeSpeed, snakeDirection, needMusic
+    global snakeSpeed, snakeDirection, needMusic, fruitSpawn
 
     while True:
         if gameStart:
@@ -405,13 +403,16 @@ def Game():
                 case "RIGHT":
                     snakeHead[0] += 10
 
-            checkFruitCollision()
-            updateFruitLocation()
+            if fruitSpawn:
+                fruit = updateFruitLocation()
+                fruitSpawn = False
+
+            fruit.checkCollision()
 
             screen.fill(black)
 
             drawSnake()
-            drawFruit()
+            fruit.drawFruit()
             drawScore()
 
             checkGameOverConditions()

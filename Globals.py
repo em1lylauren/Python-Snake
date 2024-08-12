@@ -29,8 +29,7 @@ file = open("highscores.json", "r+")
 scores = json.load(file)
 file.close()
 
-# Initial fruit attributes
-fruitLocation = [rand.randint(10, WINDOWYSIZE) // 10 * 10, rand.randint(10, WINDOWYSIZE) // 10 * 10]
+# Fruit attributes
 fruits = {
     'banana': (0, 2, 27, 27),
     'orange': (38, 5, 27, 27),
@@ -39,5 +38,4 @@ fruits = {
     'pineapple': (130, 3, 27, 27),
     'cherry': (5, 38, 27, 27)
 }
-fruitType = rand.choice(list(fruits))
-fruitSpawn = False
+fruitSpawn = True
